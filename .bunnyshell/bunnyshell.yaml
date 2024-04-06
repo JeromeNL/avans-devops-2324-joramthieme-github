@@ -1,0 +1,89 @@
+kind: Environment
+name: preview
+type: primary
+components:
+    -
+        kind: Application
+        name: appgateway
+        gitRepo: 'https://github.com/JeromeNL/avans-devops-2324-joramthieme.git'
+        gitBranch: main
+        gitApplicationPath: appgateway-service
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: ./appgateway-service/Dockerfile
+            environment:
+                CH_ORDER: order
+                CH_RETURN: return
+                CH_UPDATE: update
+                MONGO_URL: 'mongodb://mongo-database:27017'
+                RABBITMQ_URL: 'amqp://user:password@rabbitmq'
+            ports:
+                - '3000:3000'
+        hosts:
+            -
+                hostname: 'appgateway-{{ env.base_domain }}'
+                path: /
+                servicePort: 3000
+    -
+        kind: Database
+        name: mongo-database
+        dockerCompose:
+            image: mongo
+            ports:
+                - '27017:27017'
+    -
+        kind: Application
+        name: order
+        gitRepo: 'https://github.com/JeromeNL/avans-devops-2324-joramthieme.git'
+        gitBranch: main
+        gitApplicationPath: order-service
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: ./order-service/Dockerfile
+            environment:
+                CH_ORDER: order
+                CH_RETURN: return
+                CH_UPDATE: update
+                MONGO_URL: 'mongodb://mongo-database:27017'
+                RABBITMQ_URL: 'amqp://user:password@rabbitmq'
+    -
+        kind: Service
+        name: rabbitmq
+        dockerCompose:
+            environment:
+                RABBITMQ_DEFAULT_PASS: password
+                RABBITMQ_DEFAULT_USER: user
+            healthcheck:
+                test:
+                    - CMD-SHELL
+                    - 'rabbitmq-diagnostics -q ping'
+                timeout: 5s
+                interval: 10s
+                retries: 10
+            image: 'rabbitmq:3-management'
+            ports:
+                - '5672:5672'
+                - '15672:15672'
+        hosts:
+            -
+                hostname: 'rabbitmq-{{ env.base_domain }}'
+                path: /
+                servicePort: 5672
+    -
+        kind: Application
+        name: return
+        gitRepo: 'https://github.com/JeromeNL/avans-devops-2324-joramthieme.git'
+        gitBranch: main
+        gitApplicationPath: return-service
+        dockerCompose:
+            build:
+                context: .
+                dockerfile: ./return-service/Dockerfile
+            environment:
+                CH_ORDER: order
+                CH_RETURN: return
+                CH_UPDATE: update
+                MONGO_URL: 'mongodb://mongo-database:27017'
+                RABBITMQ_URL: 'amqp://user:password@rabbitmq'
