@@ -25,3 +25,5 @@ channel.consume(async (msg) => {
 		updateChannel.sendToQueue({ id: msg.id, status: OrderStatus.returned })
 	}, 10000)
 })
+
+// test
