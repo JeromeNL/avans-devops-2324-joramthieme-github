@@ -33,3 +33,4 @@ channel.consume(async (msg) => {
 	}, 10000)
 })
 
+// test
