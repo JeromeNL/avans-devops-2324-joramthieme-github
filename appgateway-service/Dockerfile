@@ -13,6 +13,10 @@ COPY $SERVICE_NAME/src ./src
 COPY $SERVICE_NAME/tsconfig.json .
 COPY shared /shared
 
+WORKDIR /shared
+RUN yarn install --production
+
+WORKDIR /app
 
 ENV NODE_ENV production
 
