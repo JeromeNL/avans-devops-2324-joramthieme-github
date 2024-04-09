@@ -1,8 +1,8 @@
 import express from 'express'
+import { Order } from './models/order'
 import promMid from 'express-prometheus-middleware'
 import mongoose from 'mongoose'
 import { ValidationHelper } from './helpers/validation-helper'
-import { Order } from './models/order'
 import {
 	OrderMessage,
 	UpdateStatusMessage,
