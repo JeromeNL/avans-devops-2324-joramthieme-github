@@ -1,6 +1,6 @@
+import { MQSingleChannel } from './channel-handlers/mq-single-channel'
 import amqlib from 'amqplib'
 import { AbstractMessageQueueClient } from './abstract/abstract-mq-client'
-import { MQSingleChannel } from './channel-handlers/mq-single-channel'
 
 export class MessageQueueClient extends AbstractMessageQueueClient {
 	async connect() {
