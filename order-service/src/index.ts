@@ -32,4 +32,4 @@ channel.consume(async (msg) => {
 		updateChannel.sendToQueue({ id: msg.id, status: OrderStatus.sent })
 	}, 10000)
 })
-
+// test
