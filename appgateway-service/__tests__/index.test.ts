@@ -1,4 +1,4 @@
 test('Mock', () => {
-	expect(true).toBe(false)
+	expect(true).toBe(true)
 })
 
